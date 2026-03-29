@@ -38,7 +38,7 @@ header("Expires: 0");
         <i class="fas fa-magnifying-glass"></i> Search
     </a>
 
-    <a href="#" class="w3-bar-item w3-button w3-mobile">
+    <a href="categories.php" class="w3-bar-item w3-button w3-mobile">
         <i class="fas fa-layer-group"></i> Categories
     </a>
 
