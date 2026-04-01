@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 18, 2026 at 01:21 AM
+-- Generation Time: Apr 01, 2026 at 07:20 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -59,8 +59,25 @@ CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `name` varchar(120) NOT NULL,
   `slug` varchar(150) NOT NULL,
-  `description` text DEFAULT NULL
+  `description` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`) VALUES
+(1, 'Open-Wheel Racing', 'open-wheel-racing', 'Cars with exposed wheels and single-seat cockpits.', 'images/open_wheel.jpg'),
+(2, 'Touring Car Racing', 'touring-car-racing', 'Modified road cars racing on circuits.', 'images/touring.jpg'),
+(3, 'Sports Car Racing', 'sports-car-racing', 'Racing with sports prototype and grand touring (GT) cars.', 'images/sports.jpg'),
+(4, 'Production Car Racing', 'production-car-racing', 'Racing with minimally modified production vehicles.', 'images/production.jpg'),
+(5, 'Stock Car Racing', 'stock-car-racing', 'Racing with cars resembling production models but heavily modified.', 'images/stock.jpg'),
+(6, 'One-Make Racing', 'one-make-racing', 'All competitors use identical cars from a single manufacturer.', 'images/one-make.jpg'),
+(7, 'Drag Racing', 'drag-racing', 'Straight-line acceleration races over a short distance (usually 1/4 mile).', 'images/drag.jpg'),
+(8, 'Off-Road Racing', 'off-road-racing', 'Racing on unpaved surfaces like dirt, sand, or gravel.', 'images/off-road.webp'),
+(9, 'Rallying', 'rallying', 'Timed stage races on closed public or private roads with varied surfaces.', 'images/rally.jpg'),
+(10, 'Dirt Track Racing', 'dirt-track-racing', 'Racing on oval dirt tracks.', 'images/dirt_track.webp');
 
 -- --------------------------------------------------------
 
@@ -197,6 +214,60 @@ INSERT INTO `roles` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `subcategories`
+--
+
+CREATE TABLE `subcategories` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `subcategories`
+--
+
+INSERT INTO `subcategories` (`id`, `category_id`, `name`) VALUES
+(1, 1, 'Formula 1 (F1)'),
+(2, 1, 'IndyCar'),
+(3, 1, 'Formula 2, Formula 3'),
+(4, 1, 'GP2, GP3'),
+(5, 1, 'Formula E (electric open-wheel racing)'),
+(6, 2, 'British Touring Car Championship (BTCC)'),
+(7, 2, 'World Touring Car Cup (WTCR)'),
+(8, 2, 'Super Touring'),
+(9, 2, 'TCR Series'),
+(10, 3, 'Endurance racing (e.g., 24 Hours of Le Mans)'),
+(11, 3, 'GT3, GT4 classes'),
+(12, 3, 'IMSA WeatherTech SportsCar Championship'),
+(13, 3, 'FIA World Endurance Championship (WEC)'),
+(14, 4, 'B Spec'),
+(15, 4, 'Super Production'),
+(16, 4, 'Group N'),
+(17, 5, 'NASCAR Cup Series'),
+(18, 5, 'ARCA Menards Series'),
+(19, 5, 'Late Model Stock Cars'),
+(20, 6, 'Porsche Carrera Cup'),
+(21, 6, 'Ferrari Challenge'),
+(22, 6, 'Renault Clio Cup'),
+(23, 7, 'Top Fuel Dragsters'),
+(24, 7, 'Funny Cars'),
+(25, 7, 'Pro Stock'),
+(26, 7, 'Motorcycle Drag Racing'),
+(27, 8, 'Rally Raid (e.g., Dakar Rally)'),
+(28, 8, 'Short Course Off-Road Racing'),
+(29, 8, 'Baja 1000'),
+(30, 8, 'Desert Racing'),
+(31, 9, 'World Rally Championship (WRC)'),
+(32, 9, 'Rallycross'),
+(33, 9, 'Hill Climb'),
+(34, 10, 'Sprint Cars'),
+(35, 10, 'Late Models'),
+(36, 10, 'Modifieds');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -302,6 +373,13 @@ ALTER TABLE `roles`
   ADD UNIQUE KEY `name` (`name`);
 
 --
+-- Indexes for table `subcategories`
+--
+ALTER TABLE `subcategories`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `category_id` (`category_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -330,7 +408,7 @@ ALTER TABLE `bookmarks`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `comments`
@@ -379,6 +457,12 @@ ALTER TABLE `race_page_drivers`
 --
 ALTER TABLE `roles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `subcategories`
+--
+ALTER TABLE `subcategories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -443,6 +527,12 @@ ALTER TABLE `race_pages`
 ALTER TABLE `race_page_drivers`
   ADD CONSTRAINT `race_page_drivers_ibfk_1` FOREIGN KEY (`race_page_id`) REFERENCES `race_pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `race_page_drivers_ibfk_2` FOREIGN KEY (`driver_id`) REFERENCES `drivers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `subcategories`
+--
+ALTER TABLE `subcategories`
+  ADD CONSTRAINT `subcategories_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `users`
