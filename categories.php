@@ -1,115 +1,45 @@
 <?php include 'header.php'; ?>
 
 <?php
-// Your categories array as before
-$categories = [
-    [
-        'title' => 'Open-Wheel Racing',
-        'description' => 'Cars with exposed wheels and single-seat cockpits.',
-        'subcategories' => [
-            'Formula 1 (F1)',
-            'IndyCar',
-            'Formula 2, Formula 3',
-            'GP2, GP3',
-            'Formula E (electric open-wheel racing)',
-        ],
-        'image' => 'images/open_wheel.jpg', // Add your image paths here
-    ],
-    [
-        'title' => 'Touring Car Racing',
-        'description' => 'Modified road cars racing on circuits.',
-        'subcategories' => [
-            'British Touring Car Championship (BTCC)',
-            'World Touring Car Cup (WTCR)',
-            'Super Touring',
-            'TCR Series',
-        ],
-        'image' => 'images/touring.jpg',
-    ],
-    [
-        'title' => 'Sports Car Racing',
-        'description' => 'Racing with sports prototype and grand touring (GT) cars.',
-        'subcategories' => [
-            'Endurance racing (e.g., 24 Hours of Le Mans)',
-            'GT3, GT4 classes',
-            'IMSA WeatherTech SportsCar Championship',
-            'FIA World Endurance Championship (WEC)',
-        ],
-        'image' => 'images/sports.jpg',
-    ],
-    [
-        'title' => 'Production Car Racing',
-        'description' => 'Racing with minimally modified production vehicles.',
-        'subcategories' => [
-            'B Spec',
-            'Super Production',
-            'Group N',
-        ],
-        'image' => 'images/production.jpg',
-    ],
-    [
-        'title' => 'Stock Car Racing',
-        'description' => 'Racing with cars resembling production models but heavily modified.',
-        'subcategories' => [
-            'NASCAR Cup Series',
-            'ARCA Menards Series',
-            'Late Model Stock Cars',
-        ],
-        'image' => 'images/stock.jpg',
-    ],
-    [
-        'title' => 'One-Make Racing',
-        'description' => 'All competitors use identical cars from a single manufacturer.',
-        'subcategories' => [
-            'Porsche Carrera Cup',
-            'Ferrari Challenge',
-            'Renault Clio Cup',
-        ],
-        'image' => 'images/one-make.jpg',
-    ],
-    [
-        'title' => 'Drag Racing',
-        'description' => 'Straight-line acceleration races over a short distance (usually 1/4 mile).',
-        'subcategories' => [
-            'Top Fuel Dragsters',
-            'Funny Cars',
-            'Pro Stock',
-            'Motorcycle Drag Racing',
-        ],
-        'image' => 'images/drag.jpg',
-    ],
-    [
-        'title' => 'Off-Road Racing',
-        'description' => 'Racing on unpaved surfaces like dirt, sand, or gravel.',
-        'subcategories' => [
-            'Rally Raid (e.g., Dakar Rally)',
-            'Short Course Off-Road Racing',
-            'Baja 1000',
-            'Desert Racing',
-        ],
-        'image' => 'images/off-road.webp',
-    ],
-    [
-        'title' => 'Rallying',
-        'description' => 'Timed stage races on closed public or private roads with varied surfaces.',
-        'subcategories' => [
-            'World Rally Championship (WRC)',
-            'Rallycross',
-            'Hill Climb',
-        ],
-        'image' => 'images/rally.jpg',
-    ],
-    [
-        'title' => 'Dirt Track Racing',
-        'description' => 'Racing on oval dirt tracks.',
-        'subcategories' => [
-            'Sprint Cars',
-            'Late Models',
-            'Modifieds',
-        ],
-        'image' => 'images/dirt_track.webp',
-    ],
-];
+// Database connection settings - adjust as needed
+$host = 'localhost';
+$dbname = 'racing_wiki';
+$user = 'root';
+$pass = '';
+
+$mysqli = new mysqli($host, $user, $pass, $dbname);
+if ($mysqli->connect_error) {
+    die('Database connection error: ' . $mysqli->connect_error);
+}
+
+// Fetch categories with images and descriptions
+$categories = [];
+$cat_sql = "SELECT id, name, description, image FROM categories ORDER BY id ASC";
+if ($cat_result = $mysqli->query($cat_sql)) {
+    while ($cat = $cat_result->fetch_assoc()) {
+        $cat_id = (int)$cat['id'];
+
+        // Fetch subcategories for this category
+        $subcategories = [];
+        $sub_sql = "SELECT name FROM subcategories WHERE category_id = $cat_id ORDER BY id ASC";
+        if ($sub_result = $mysqli->query($sub_sql)) {
+            while ($sub = $sub_result->fetch_assoc()) {
+                $subcategories[] = $sub['name'];
+            }
+            $sub_result->free();
+        }
+
+        $categories[] = [
+            'title' => $cat['name'],
+            'description' => $cat['description'],
+            'subcategories' => $subcategories,
+            'image' => $cat['image'],
+        ];
+    }
+    $cat_result->free();
+} else {
+    echo "<p>Error loading categories.</p>";
+}
 ?>
 
 <h2>Racing Categories</h2>
