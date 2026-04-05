@@ -19,14 +19,21 @@ if ($cat_result = $mysqli->query($cat_sql)) {
     while ($cat = $cat_result->fetch_assoc()) {
         $cat_id = (int)$cat['id'];
 
-        // Fetch subcategories for this category
+        // Fetch subcategories for this category with slug using prepared statement
         $subcategories = [];
-        $sub_sql = "SELECT name FROM subcategories WHERE category_id = $cat_id ORDER BY id ASC";
-        if ($sub_result = $mysqli->query($sub_sql)) {
+        $sub_sql = "SELECT name, slug FROM subcategories WHERE category_id = ? ORDER BY id ASC";
+        $stmt = $mysqli->prepare($sub_sql);
+        if ($stmt) {
+            $stmt->bind_param("i", $cat_id);
+            $stmt->execute();
+            $sub_result = $stmt->get_result();
             while ($sub = $sub_result->fetch_assoc()) {
-                $subcategories[] = $sub['name'];
+                $subcategories[] = [
+                    'name' => $sub['name'],
+                    'slug' => $sub['slug']
+                ];
             }
-            $sub_result->free();
+            $stmt->close();
         }
 
         $categories[] = [
@@ -43,7 +50,7 @@ if ($cat_result = $mysqli->query($cat_sql)) {
 ?>
 
 <h2>Racing Categories</h2>
-<p>Click on a category image to see its subcategories.</p>
+<p>Click on a category image to see its subcategories. Click on a subcategory to visit its page.</p>
 
 <style>
 .category-box {
@@ -94,6 +101,14 @@ if ($cat_result = $mysqli->query($cat_sql)) {
 .subcategory-panel ul li {
     margin-bottom: 6px;
 }
+.subcategory-panel ul li a {
+    color: #006666;
+    text-decoration: none;
+    font-weight: 600;
+}
+.subcategory-panel ul li a:hover {
+    text-decoration: underline;
+}
 </style>
 
 <div class="w3-row-padding">
@@ -108,7 +123,11 @@ if ($cat_result = $mysqli->query($cat_sql)) {
                 <p><?= htmlspecialchars($cat['description']) ?></p>
                 <ul>
                     <?php foreach ($cat['subcategories'] as $sub): ?>
-                        <li><?= htmlspecialchars($sub) ?></li>
+                        <li>
+                            <a href="subcategory.php?slug=<?= urlencode($sub['slug']) ?>">
+                                <?= htmlspecialchars($sub['name']) ?>
+                            </a>
+                        </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
