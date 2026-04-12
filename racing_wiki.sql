@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 06, 2026 at 01:50 AM
+-- Generation Time: Apr 12, 2026 at 06:43 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -60,24 +60,25 @@ CREATE TABLE `categories` (
   `name` varchar(120) NOT NULL,
   `slug` varchar(150) NOT NULL,
   `description` text DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL
+  `image` varchar(255) DEFAULT NULL,
+  `visible` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`) VALUES
-(1, 'Open-Wheel Racing', 'open-wheel-racing', 'Cars with exposed wheels and single-seat cockpits.', 'images/open_wheel.jpg'),
-(2, 'Touring Car Racing', 'touring-car-racing', 'Modified road cars racing on circuits.', 'images/touring.jpg'),
-(3, 'Sports Car Racing', 'sports-car-racing', 'Racing with sports prototype and grand touring (GT) cars.', 'images/sports.jpg'),
-(4, 'Production Car Racing', 'production-car-racing', 'Racing with minimally modified production vehicles.', 'images/production.jpg'),
-(5, 'Stock Car Racing', 'stock-car-racing', 'Racing with cars resembling production models but heavily modified.', 'images/stock.jpg'),
-(6, 'One-Make Racing', 'one-make-racing', 'All competitors use identical cars from a single manufacturer.', 'images/one-make.jpg'),
-(7, 'Drag Racing', 'drag-racing', 'Straight-line acceleration races over a short distance (usually 1/4 mile).', 'images/drag.jpg'),
-(8, 'Off-Road Racing', 'off-road-racing', 'Racing on unpaved surfaces like dirt, sand, or gravel.', 'images/off-road.webp'),
-(9, 'Rallying', 'rallying', 'Timed stage races on closed public or private roads with varied surfaces.', 'images/rally.jpg'),
-(10, 'Dirt Track Racing', 'dirt-track-racing', 'Racing on oval dirt tracks.', 'images/dirt_track.webp');
+INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `visible`) VALUES
+(1, 'Open-Wheel Racing', 'open-wheel-racing', 'Cars with exposed wheels and single-seat cockpits.', 'images/open_wheel.jpg', 1),
+(2, 'Touring Car Racing', 'touring-car-racing', 'Modified road cars racing on circuits.', 'images/touring.jpg', 1),
+(3, 'Sports Car Racing', 'sports-car-racing', 'Racing with sports prototype and grand touring (GT) cars.', 'images/sports.jpg', 1),
+(4, 'Production Car Racing', 'production-car-racing', 'Racing with minimally modified production vehicles.', 'images/production.jpg', 1),
+(5, 'Stock Car Racing', 'stock-car-racing', 'Racing with cars resembling production models but heavily modified.', 'images/stock.jpg', 1),
+(6, 'One-Make Racing', 'one-make-racing', 'All competitors use identical cars from a single manufacturer.', 'images/one-make.jpg', 1),
+(7, 'Drag Racing', 'drag-racing', 'Straight-line acceleration races over a short distance (usually 1/4 mile).', 'images/drag.jpg', 1),
+(8, 'Off-Road Racing', 'off-road-racing', 'Racing on unpaved surfaces like dirt, sand, or gravel.', 'images/off-road.webp', 1),
+(9, 'Rallying', 'rallying', 'Timed stage races on closed public or private roads with varied surfaces.', 'images/rally.jpg', 1),
+(10, 'Dirt Track Racing', 'dirt-track-racing', 'Racing on oval dirt tracks.', 'images/dirt_track.webp', 1);
 
 -- --------------------------------------------------------
 
@@ -222,50 +223,51 @@ CREATE TABLE `subcategories` (
   `category_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `slug` varchar(150) NOT NULL,
-  `description` text DEFAULT NULL
+  `description` text DEFAULT NULL,
+  `visible` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `subcategories`
 --
 
-INSERT INTO `subcategories` (`id`, `category_id`, `name`, `slug`, `description`) VALUES
-(1, 1, 'Formula 1 (F1)', 'formula-1-f1', 'Formula 1 (F1) is the pinnacle of open-wheel racing, featuring the fastest cars and most skilled drivers competing globally in a series of Grand Prix events.'),
-(2, 1, 'IndyCar', 'indycar', 'IndyCar is a premier American open-wheel racing series, famous for the Indianapolis 500, showcasing high-speed oval and road course racing.'),
-(3, 1, 'Formula 2, Formula 3', 'formula-2-formula-3', 'Formula 2 and Formula 3 serve as key feeder series to Formula 1, providing young drivers with competitive single-seater racing experience.'),
-(4, 1, 'GP2, GP3', 'gp2-gp3', 'GP2 and GP3 were former feeder series to Formula 1, now replaced by FIA Formula 2 and Formula 3 championships, focusing on driver development.'),
-(5, 1, 'Formula E (electric open-wheel racing)', 'formula-e-electric-open-wheel-racing', 'Formula E is an all-electric single-seater racing series promoting sustainable motorsport with races held on city street circuits worldwide.'),
-(6, 2, 'British Touring Car Championship (BTCC)', 'british-touring-car-championship-btcc', 'The British Touring Car Championship (BTCC) is a popular touring car racing series in the UK, featuring modified production cars competing on circuits.'),
-(7, 2, 'World Touring Car Cup (WTCR)', 'world-touring-car-cup-wtcr', 'The World Touring Car Cup (WTCR) is an international touring car championship featuring production-based cars racing on circuits globally.'),
-(8, 2, 'Super Touring', 'super-touring', 'Super Touring was a popular touring car racing category in the 1990s, known for highly modified production cars and close competition.'),
-(9, 2, 'TCR Series', 'tcr-series', 'The TCR Series is a global touring car racing category with cost-effective, production-based cars designed for close and competitive racing.'),
-(10, 3, 'Endurance racing (e.g., 24 Hours of Le Mans)', 'endurance-racing-eg-24-hours-of-le-mans', 'Endurance racing, such as the 24 Hours of Le Mans, tests the durability of cars and stamina of drivers over long-distance races.'),
-(11, 3, 'GT3, GT4 classes', 'gt3-gt4-classes', 'GT3 and GT4 classes feature grand touring cars modified for racing, balancing performance and cost for competitive sports car racing.'),
-(12, 3, 'IMSA WeatherTech SportsCar Championship', 'imsa-weathertech-sportscar-championship', 'The IMSA WeatherTech SportsCar Championship is a North American sports car racing series featuring multiple classes competing simultaneously.'),
-(13, 3, 'FIA World Endurance Championship (WEC)', 'fia-world-endurance-championship-wec', 'The FIA World Endurance Championship (WEC) is a global endurance racing series including iconic events like the 24 Hours of Le Mans.'),
-(14, 4, 'B Spec', 'b-spec', 'B Spec racing features small, production-based cars with minimal modifications, emphasizing driver skill and close competition.'),
-(15, 4, 'Super Production', 'super-production', 'Super Production is a racing category for production cars with limited modifications, focusing on affordability and competitive racing.'),
-(16, 4, 'Group N', 'group-n', 'Group N is a motorsport category for near-production cars, allowing only minimal modifications to maintain close ties to road vehicles.'),
-(17, 5, 'NASCAR Cup Series', 'nascar-cup-series', 'The NASCAR Cup Series is the premier stock car racing series in the USA, known for high-speed oval track racing and large fan following.'),
-(18, 5, 'ARCA Menards Series', 'arca-menards-series', 'The ARCA Menards Series is a stock car racing series in the USA, serving as a developmental platform for drivers aspiring to NASCAR.'),
-(19, 5, 'Late Model Stock Cars', 'late-model-stock-cars', 'Late Model Stock Cars are a popular class of stock car racing vehicles, often raced on short oval tracks in grassroots motorsport.'),
-(20, 6, 'Porsche Carrera Cup', 'porsche-carrera-cup', 'The Porsche Carrera Cup is a one-make racing series featuring identical Porsche 911 GT3 Cup cars competing in sprint races.'),
-(21, 6, 'Ferrari Challenge', 'ferrari-challenge', 'The Ferrari Challenge is a one-make racing series where drivers compete in identical Ferrari race cars, promoting brand loyalty and driver development.'),
-(22, 6, 'Renault Clio Cup', 'renault-clio-cup', 'The Renault Clio Cup is a one-make racing series featuring Renault Clio cars, popular in Europe for developing young racing talent.'),
-(23, 7, 'Top Fuel Dragsters', 'top-fuel-dragsters', 'Top Fuel Dragsters are the fastest accelerating vehicles in drag racing, capable of covering a quarter-mile in under 4 seconds.'),
-(24, 7, 'Funny Cars', 'funny-cars', 'Funny Cars are drag racing vehicles with custom bodies and powerful engines, known for their distinctive appearance and high speeds.'),
-(25, 7, 'Pro Stock', 'pro-stock', 'Pro Stock drag racing features cars that resemble production models but are highly modified for maximum performance in straight-line acceleration.'),
-(26, 7, 'Motorcycle Drag Racing', 'motorcycle-drag-racing', NULL),
-(27, 8, 'Rally Raid (e.g., Dakar Rally)', 'rally-raid-eg-dakar-rally', NULL),
-(28, 8, 'Short Course Off-Road Racing', 'short-course-off-road-racing', NULL),
-(29, 8, 'Baja 1000', 'baja-1000', NULL),
-(30, 8, 'Desert Racing', 'desert-racing', NULL),
-(31, 9, 'World Rally Championship (WRC)', 'world-rally-championship-wrc', NULL),
-(32, 9, 'Rallycross', 'rallycross', NULL),
-(33, 9, 'Hill Climb', 'hill-climb', NULL),
-(34, 10, 'Sprint Cars', 'sprint-cars', NULL),
-(35, 10, 'Late Models', 'late-models', NULL),
-(36, 10, 'Modifieds', 'modifieds', NULL);
+INSERT INTO `subcategories` (`id`, `category_id`, `name`, `slug`, `description`, `visible`) VALUES
+(1, 1, 'Formula 1 (F1)', 'formula-1-f1', 'Formula 1 (F1) is the pinnacle of open-wheel racing, featuring the fastest cars and most skilled drivers competing globally in a series of Grand Prix events.', 1),
+(2, 1, 'IndyCar', 'indycar', 'IndyCar is a premier American open-wheel racing series, famous for the Indianapolis 500, showcasing high-speed oval and road course racing.', 1),
+(3, 1, 'Formula 2, Formula 3', 'formula-2-formula-3', 'Formula 2 and Formula 3 serve as key feeder series to Formula 1, providing young drivers with competitive single-seater racing experience.', 1),
+(4, 1, 'GP2, GP3', 'gp2-gp3', 'GP2 and GP3 were former feeder series to Formula 1, now replaced by FIA Formula 2 and Formula 3 championships, focusing on driver development.', 1),
+(5, 1, 'Formula E (electric open-wheel racing)', 'formula-e-electric-open-wheel-racing', 'Formula E is an all-electric single-seater racing series promoting sustainable motorsport with races held on city street circuits worldwide.', 1),
+(6, 2, 'British Touring Car Championship (BTCC)', 'british-touring-car-championship-btcc', 'The British Touring Car Championship (BTCC) is a popular touring car racing series in the UK, featuring modified production cars competing on circuits.', 1),
+(7, 2, 'World Touring Car Cup (WTCR)', 'world-touring-car-cup-wtcr', 'The World Touring Car Cup (WTCR) is an international touring car championship featuring production-based cars racing on circuits globally.', 1),
+(8, 2, 'Super Touring', 'super-touring', 'Super Touring was a popular touring car racing category in the 1990s, known for highly modified production cars and close competition.', 1),
+(9, 2, 'TCR Series', 'tcr-series', 'The TCR Series is a global touring car racing category with cost-effective, production-based cars designed for close and competitive racing.', 1),
+(10, 3, 'Endurance racing (e.g., 24 Hours of Le Mans)', 'endurance-racing-eg-24-hours-of-le-mans', 'Endurance racing, such as the 24 Hours of Le Mans, tests the durability of cars and stamina of drivers over long-distance races.', 1),
+(11, 3, 'GT3, GT4 classes', 'gt3-gt4-classes', 'GT3 and GT4 classes feature grand touring cars modified for racing, balancing performance and cost for competitive sports car racing.', 1),
+(12, 3, 'IMSA WeatherTech SportsCar Championship', 'imsa-weathertech-sportscar-championship', 'The IMSA WeatherTech SportsCar Championship is a North American sports car racing series featuring multiple classes competing simultaneously.', 1),
+(13, 3, 'FIA World Endurance Championship (WEC)', 'fia-world-endurance-championship-wec', 'The FIA World Endurance Championship (WEC) is a global endurance racing series including iconic events like the 24 Hours of Le Mans.', 1),
+(14, 4, 'B Spec', 'b-spec', 'B Spec racing features small, production-based cars with minimal modifications, emphasizing driver skill and close competition.', 1),
+(15, 4, 'Super Production', 'super-production', 'Super Production is a racing category for production cars with limited modifications, focusing on affordability and competitive racing.', 1),
+(16, 4, 'Group N', 'group-n', 'Group N is a motorsport category for near-production cars, allowing only minimal modifications to maintain close ties to road vehicles.', 1),
+(17, 5, 'NASCAR Cup Series', 'nascar-cup-series', 'The NASCAR Cup Series is the premier stock car racing series in the USA, known for high-speed oval track racing and large fan following.', 1),
+(18, 5, 'ARCA Menards Series', 'arca-menards-series', 'The ARCA Menards Series is a stock car racing series in the USA, serving as a developmental platform for drivers aspiring to NASCAR.', 1),
+(19, 5, 'Late Model Stock Cars', 'late-model-stock-cars', 'Late Model Stock Cars are a popular class of stock car racing vehicles, often raced on short oval tracks in grassroots motorsport.', 1),
+(20, 6, 'Porsche Carrera Cup', 'porsche-carrera-cup', 'The Porsche Carrera Cup is a one-make racing series featuring identical Porsche 911 GT3 Cup cars competing in sprint races.', 1),
+(21, 6, 'Ferrari Challenge', 'ferrari-challenge', 'The Ferrari Challenge is a one-make racing series where drivers compete in identical Ferrari race cars, promoting brand loyalty and driver development.', 1),
+(22, 6, 'Renault Clio Cup', 'renault-clio-cup', 'The Renault Clio Cup is a one-make racing series featuring Renault Clio cars, popular in Europe for developing young racing talent.', 1),
+(23, 7, 'Top Fuel Dragsters', 'top-fuel-dragsters', 'Top Fuel Dragsters are the fastest accelerating vehicles in drag racing, capable of covering a quarter-mile in under 4 seconds.', 1),
+(24, 7, 'Funny Cars', 'funny-cars', 'Funny Cars are drag racing vehicles with custom bodies and powerful engines, known for their distinctive appearance and high speeds.', 1),
+(25, 7, 'Pro Stock', 'pro-stock', 'Pro Stock drag racing features cars that resemble production models but are highly modified for maximum performance in straight-line acceleration.', 1),
+(26, 7, 'Motorcycle Drag Racing', 'motorcycle-drag-racing', 'Motorcycle Drag Racing is a high-speed straight-line acceleration contest featuring motorcycles competing over a short distance, emphasizing power and rider skill.', 1),
+(27, 8, 'Rally Raid (e.g., Dakar Rally)', 'rally-raid-eg-dakar-rally', 'Rally Raid, such as the Dakar Rally, is a long-distance off-road race across challenging terrains, testing endurance, navigation, and vehicle durability.', 1),
+(28, 8, 'Short Course Off-Road Racing', 'short-course-off-road-racing', 'Short Course Off-Road Racing involves racing on short, closed off-road circuits with jumps and tight turns, demanding precision and speed.', 1),
+(29, 8, 'Baja 1000', 'baja-1000', 'The Baja 1000 is an iconic off-road race held in Mexico, covering desert terrain and challenging drivers with extreme endurance and vehicle toughness.', 1),
+(30, 8, 'Desert Racing', 'desert-racing', 'Desert Racing features long-distance races across desert landscapes, requiring vehicles and drivers to handle rough, sandy, and unpredictable terrain.', 1),
+(31, 9, 'World Rally Championship (WRC)', 'world-rally-championship-wrc', 'The World Rally Championship (WRC) is a premier international rally series featuring timed stage races on diverse surfaces and challenging conditions.', 1),
+(32, 9, 'Rallycross', 'rallycross', 'Rallycross combines rally and circuit racing on mixed surfaces, featuring short, intense races with multiple cars competing simultaneously.', 1),
+(33, 9, 'Hill Climb', 'hill-climb', 'Hill Climb racing challenges drivers to race uphill on winding roads or tracks, testing vehicle power and driver precision against the clock.', 1),
+(34, 10, 'Sprint Cars', 'sprint-cars', 'Sprint Cars are high-powered, small race cars designed for short oval dirt or paved tracks, known for their speed and agility.', 1),
+(35, 10, 'Late Models', 'late-models', 'Late Models are a popular class of stock cars raced primarily on short oval tracks, featuring highly modified chassis and engines.', 1),
+(36, 10, 'Modifieds', 'modifieds', 'Modifieds are stock cars with extensive modifications to chassis and body, raced on oval tracks with a focus on speed and handling.', 1);
 
 -- --------------------------------------------------------
 
@@ -470,7 +472,7 @@ ALTER TABLE `subcategories`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
