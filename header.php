@@ -14,7 +14,7 @@ header("Expires: 0");
     <title>Racing Wiki</title>
 
     <!-- Local styles (recommended in NetBeans project root /assets or same folder) -->
-    <link rel="stylesheet" href="mystyles.css">
+    <link rel="stylesheet" href="admin_styles.css">
 
     <!-- Libraries (as requested in your format) -->
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -54,16 +54,19 @@ header("Expires: 0");
         </div>
     </div>
 
-    <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-            <a href="profile.php" class="w3-bar-item w3-button w3-green w3-right" style="margin-right: 5px;">Profile</a>
-        <?php else: ?>
-            <a href="signup.php" class="w3-bar-item w3-button w3-green w3-right w3-mobile">
-            <i class="fas fa-user-plus"></i> Sign Up
-        </a>
-        <a href="login.php" class="w3-bar-item w3-button w3-right w3-mobile">
-            <i class="fas fa-right-to-bracket"></i> Login
-        </a>
-        <?php endif; ?>
+    <!-- Admin Dashboard button always visible (no session login check) -->
+    <a href="admin_dashboard.php" class="w3-bar-item w3-button w3-orange w3-right" style="margin-right: 5px;">
+        <i class="fas fa-tachometer-alt"></i> Admin Dashboard
+    </a>
+
+    <!-- Profile, Signup, Login buttons without session check -->
+    <a href="profile.php" class="w3-bar-item w3-button w3-green w3-right" style="margin-right: 5px;">Profile</a>
+    <a href="signup.php" class="w3-bar-item w3-button w3-green w3-right w3-mobile">
+        <i class="fas fa-user-plus"></i> Sign Up
+    </a>
+    <a href="login.php" class="w3-bar-item w3-button w3-right w3-mobile">
+        <i class="fas fa-right-to-bracket"></i> Login
+    </a>
 </div>
 
 <!-- Page container -->

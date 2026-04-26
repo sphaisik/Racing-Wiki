@@ -1,4 +1,6 @@
 <?php
+include 'header.php';
+
 session_start();
 
 // Temporarily disable login check to allow access without login
@@ -14,20 +16,20 @@ if ($mysqli->connect_error) {
     die('Database connection error: ' . $mysqli->connect_error);
 }
 
-// Fetch categories without 'visible'
+// Fetch categories including 'visible'
 $categories = [];
-$cat_result = $mysqli->query("SELECT id, name FROM categories ORDER BY id ASC");
+$cat_result = $mysqli->query("SELECT id, name, visible FROM categories ORDER BY id ASC");
 while ($row = $cat_result->fetch_assoc()) {
     $categories[] = $row;
 }
 
-// Fetch subcategories without 'visible'
+// Fetch subcategories including 'visible', ordered by subcategory id
 $subcategories = [];
 $sub_result = $mysqli->query("
-    SELECT s.id, s.name, s.slug, c.name AS category_name 
+    SELECT s.id, s.name, s.slug, s.visible, c.name AS category_name 
     FROM subcategories s
     JOIN categories c ON s.category_id = c.id
-    ORDER BY c.name ASC, s.name ASC
+    ORDER BY s.id ASC
 ");
 while ($row = $sub_result->fetch_assoc()) {
     $subcategories[] = $row;
@@ -39,46 +41,120 @@ while ($row = $sub_result->fetch_assoc()) {
 <head>
     <title>Admin Dashboard - Manage Categories & Subcategories</title>
     <style>
+        /* Reset and base */
+        * {
+            box-sizing: border-box;
+        }
         body {
-            font-family: Arial, sans-serif;
-            background: #121212;
-            color: #eee;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            margin: 0;
             padding: 20px;
+        }
+        h1, h2 {
+            color: #222;
+            margin-bottom: 10px;
         }
         a.add-new {
             display: inline-block;
-            margin-bottom: 10px;
-            padding: 6px 12px;
+            margin-bottom: 20px;
+            padding: 10px 18px;
             background-color: #007bff;
             color: white;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
         }
         a.add-new:hover {
             background-color: #0056b3;
         }
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0 10px;
             margin-bottom: 40px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
         }
-        th, td {
-            border: 1px solid #444;
-            padding: 8px 12px;
+        thead tr {
+            background-color: #007bff;
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+        thead th {
+            padding: 12px 15px;
             text-align: left;
+            font-weight: 600;
+            font-size: 14px;
         }
-        th {
-            background-color: #222;
+        tbody tr {
+            background: #fafafa;
+            transition: background-color 0.2s ease;
+            border-radius: 6px;
         }
-        tr:nth-child(even) {
-            background-color: #1a1a1a;
+        tbody tr:hover {
+            background-color: #e6f0ff;
+        }
+        tbody td {
+            padding: 12px 15px;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+        tbody tr td:first-child {
+            border-radius: 6px 0 0 6px;
+        }
+        tbody tr td:last-child {
+            border-radius: 0 6px 6px 0;
         }
         a {
-            color: #66aaff;
+            color: #007bff;
             text-decoration: none;
+            font-weight: 600;
+            margin-right: 10px;
         }
         a:hover {
             text-decoration: underline;
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            thead tr {
+                display: none;
+            }
+            tbody tr {
+                margin-bottom: 20px;
+                box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+                border-radius: 8px;
+                background: white;
+                padding: 15px;
+            }
+            tbody td {
+                padding-left: 50%;
+                position: relative;
+                text-align: right;
+                font-size: 13px;
+            }
+            tbody td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                top: 12px;
+                font-weight: 600;
+                text-align: left;
+                color: #555;
+                font-size: 13px;
+            }
+            tbody tr td:first-child {
+                border-radius: 8px 8px 0 0;
+            }
+            tbody tr td:last-child {
+                border-radius: 0 0 8px 8px;
+            }
         }
     </style>
 </head>
@@ -94,7 +170,7 @@ while ($row = $sub_result->fetch_assoc()) {
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Visible</th> <!-- Kept for layout, but no data -->
+                <th>Visible</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -102,17 +178,20 @@ while ($row = $sub_result->fetch_assoc()) {
             <?php if (!empty($categories)): ?>
                 <?php foreach ($categories as $cat): ?>
                     <tr>
-                        <td><?= htmlspecialchars($cat['id']) ?></td>
-                        <td><?= htmlspecialchars($cat['name']) ?></td>
-                        <td>—</td> <!-- No visibility info available -->
-                        <td>
-                            <a href="edit_category.php?id=<?= $cat['id'] ?>">Edit</a> |
+                        <td data-label="ID"><?= htmlspecialchars($cat['id']) ?></td>
+                        <td data-label="Name"><?= htmlspecialchars($cat['name']) ?></td>
+                        <td data-label="Visible"><?= $cat['visible'] ? 'Visible' : 'Hidden' ?></td>
+                        <td data-label="Actions">
+                            <a href="edit_category.php?id=<?= $cat['id'] ?>">Edit</a>
                             <a href="delete_category.php?id=<?= $cat['id'] ?>" onclick="return confirm('Are you sure?');">Delete</a>
+                            <a href="toggle_visibility.php?type=category&id=<?= $cat['id'] ?>">
+                                <?= $cat['visible'] ? 'Hide' : 'Show' ?>
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                <tr><td colspan="4">No categories found.</td></tr>
+                <tr><td colspan="4" style="text-align:center;">No categories found.</td></tr>
             <?php endif; ?>
         </tbody>
     </table>
@@ -128,7 +207,7 @@ while ($row = $sub_result->fetch_assoc()) {
                 <th>Name</th>
                 <th>Slug</th>
                 <th>Category</th>
-                <th>Visible</th> <!-- Kept for layout, but no data -->
+                <th>Visible</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -136,19 +215,22 @@ while ($row = $sub_result->fetch_assoc()) {
             <?php if (!empty($subcategories)): ?>
                 <?php foreach ($subcategories as $sub): ?>
                     <tr>
-                        <td><?= htmlspecialchars($sub['id']) ?></td>
-                        <td><?= htmlspecialchars($sub['name']) ?></td>
-                        <td><?= htmlspecialchars($sub['slug']) ?></td>
-                        <td><?= htmlspecialchars($sub['category_name']) ?></td>
-                        <td>—</td> <!-- No visibility info available -->
-                        <td>
-                            <a href="edit_subcategory.php?id=<?= $sub['id'] ?>">Edit</a> |
+                        <td data-label="ID"><?= htmlspecialchars($sub['id']) ?></td>
+                        <td data-label="Name"><?= htmlspecialchars($sub['name']) ?></td>
+                        <td data-label="Slug"><?= htmlspecialchars($sub['slug']) ?></td>
+                        <td data-label="Category"><?= htmlspecialchars($sub['category_name']) ?></td>
+                        <td data-label="Visible"><?= $sub['visible'] ? 'Visible' : 'Hidden' ?></td>
+                        <td data-label="Actions">
+                            <a href="edit_subcategory.php?id=<?= $sub['id'] ?>">Edit</a>
                             <a href="delete_subcategory.php?id=<?= $sub['id'] ?>" onclick="return confirm('Are you sure?');">Delete</a>
+                            <a href="toggle_visibility.php?type=subcategory&id=<?= $sub['id'] ?>">
+                                <?= $sub['visible'] ? 'Hide' : 'Show' ?>
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                <tr><td colspan="6">No subcategories found.</td></tr>
+                <tr><td colspan="6" style="text-align:center;">No subcategories found.</td></tr>
             <?php endif; ?>
         </tbody>
     </table>

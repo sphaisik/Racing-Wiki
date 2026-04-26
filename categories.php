@@ -12,16 +12,16 @@ if ($mysqli->connect_error) {
     die('Database connection error: ' . $mysqli->connect_error);
 }
 
-// Fetch categories with images and descriptions
+// Fetch categories with images, descriptions, and visibility filter
 $categories = [];
-$cat_sql = "SELECT id, name, description, image FROM categories ORDER BY id ASC";
+$cat_sql = "SELECT id, name, description, image, visible FROM categories WHERE visible = 1 ORDER BY id ASC";
 if ($cat_result = $mysqli->query($cat_sql)) {
     while ($cat = $cat_result->fetch_assoc()) {
         $cat_id = (int)$cat['id'];
 
-        // Fetch subcategories for this category with slug using prepared statement
+        // Fetch visible subcategories for this category with slug using prepared statement
         $subcategories = [];
-        $sub_sql = "SELECT name, slug FROM subcategories WHERE category_id = ? ORDER BY id ASC";
+        $sub_sql = "SELECT name, slug, visible FROM subcategories WHERE category_id = ? AND visible = 1 ORDER BY id ASC";
         $stmt = $mysqli->prepare($sub_sql);
         if ($stmt) {
             $stmt->bind_param("i", $cat_id);
