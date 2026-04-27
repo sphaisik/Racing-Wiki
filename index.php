@@ -3,8 +3,8 @@
 
 <section class="w3-panel w3-padding-32 w3-round-large w3-card"
          style="margin-top: 18px;
-                background: linear-gradient(135deg, rgba(0,128,128,.18), rgba(0,0,0,.06));
-                border: 1px solid rgba(0,0,0,.08);">
+         background: linear-gradient(135deg, rgba(0,128,128,.18), rgba(0,0,0,.06));
+         border: 1px solid rgba(0,0,0,.08);">
     <div class="w3-row-padding" style="display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px;">
         <div>
             <h1 style="margin: 0 0 10px; font-weight: 800; letter-spacing: -0.02em;">
@@ -45,13 +45,13 @@
             <h3 style="margin: 0 0 10px;"><i class="fas fa-clock"></i> Latest Published Pages</h3>
         </div>
     </div>
-        <!-- Latest comments -->
-        <div class="w3-padding-16">
-            <h3 style="margin: 0 0 10px;"><i class="fas fa-comments"></i> Latest Comments</h3>
-                </div>
-            </div>
-        </div>
+    <!-- Latest comments -->
+    <div class="w3-padding-16">
+        <h3 style="margin: 0 0 10px;"><i class="fas fa-comments"></i> Latest Comments</h3>
     </div>
+</div>
+</div>
+</div>
 </section>
 
 <?php include 'footer.php'; ?>

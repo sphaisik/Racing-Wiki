@@ -55,7 +55,10 @@ header("Expires: 0");
             </div>
 
             <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-                <a href="profile.php" class="w3-bar-item w3-button w3-green w3-right w3-mobile" style="margin-right: 5px;">
+                <a href="bookmarks.php" class="w3-bar-item w3-button w3-green w3-left w3-mobile">
+                    <i class="fas fa-bookmark"></i> Bookmarks
+                </a>
+                <a href="profile.php" class="w3-bar-item w3-button w3-green w3-right w3-mobile">
                     <i class="fas fa-user"></i> Profile
                 </a>
                 <a href="logout.php" class="w3-bar-item w3-button w3-right w3-mobile">
