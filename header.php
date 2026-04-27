@@ -91,6 +91,7 @@ header("Expires: 0");
                 <i class="fas fa-flag-checkered"></i> Racing Wiki
             </a>
             <a href="search.php"><i class="fas fa-magnifying-glass"></i> Search</a>
+            <a href="event.php"><i class="fas fa-layer-group"></i> Events, Drivers & Tracks</a>
             <a href="categories.php"><i class="fas fa-layer-group"></i> Categories</a>
 
     <div class="w3-dropdown-hover w3-mobile">
