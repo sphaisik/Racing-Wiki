@@ -108,8 +108,49 @@ CREATE TABLE `drivers` (
   `country` varchar(100) DEFAULT NULL,
   `dob` date DEFAULT NULL,
   `bio` text DEFAULT NULL,
+  `achievements` varchar(255) DEFAULT NULL,
+  `years_active` varchar(50) DEFAULT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
   `image_media_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `drivers`
+--
+
+INSERT INTO `drivers` (`id`, `name`, `country`, `dob`, `bio`, `achievements`, `years_active`, `image_path`, `image_media_id`) VALUES
+(1, 'Michael Schumacher', 'Germany', NULL, '7× Formula 1 World Champion. Considered one of the greatest F1 drivers of all time.', '7× World Champion', '1991–2012', 'driver-img/Michael-Schumacher.jpg', NULL),
+(2, 'Lewis Hamilton', 'UK', NULL, '7× Formula 1 World Champion. Holds the record for most wins and pole positions in F1.', '7× World Champion', '2007–Present', 'driver-img/Lewis-Hamilton.jpg', NULL),
+(3, 'Sébastien Loeb', 'France', NULL, '9× WRC World Rally Champion. Dominated the World Rally Championship throughout the 2000s.', '9× World Champion', '1999–Present', 'driver-img/Sébastien-Loeb.jpg', NULL),
+(4, 'Sébastien Ogier', 'France', NULL, '8× WRC World Rally Champion. One of the most decorated rally drivers in history.', '8× World Champion', '2007–Present', 'driver-img/Sébastien-Ogier.jpg', NULL),
+(5, 'John Force', 'USA', NULL, '16× NHRA Funny Car Champion. The most successful driver in NHRA drag racing history.', '16× NHRA Champion', '1978–Present', 'driver-img/John-Force.jpg', NULL),
+(6, 'Dale Earnhardt Sr.', 'USA', NULL, '7× NASCAR Cup Series Champion, known as \"The Intimidator\". Tragically lost his life at Daytona in 2001.', '7× Cup Series Champion', '1975–2001', 'driver-img/Dale-Earnhardt.jpg', NULL),
+(7, 'Jimmie Johnson', 'USA', NULL, '7× NASCAR Cup Series Champion. Won five consecutive titles from 2006–2010.', '7× Cup Series Champion', '2001–Present', 'driver-img/Jimmie-Johnson.jpg', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `driver_categories`
+--
+
+CREATE TABLE `driver_categories` (
+  `id` int(11) NOT NULL,
+  `driver_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `driver_categories`
+--
+
+INSERT INTO `driver_categories` (`id`, `driver_id`, `category_id`) VALUES
+(1, 1, 1),
+(2, 2, 1),
+(3, 3, 9),
+(4, 4, 9),
+(5, 5, 7),
+(6, 6, 5),
+(7, 7, 5);
 
 -- --------------------------------------------------------
 
@@ -126,13 +167,41 @@ CREATE TABLE `events` (
   `location` varchar(255) DEFAULT NULL,
   `timezone` varchar(100) DEFAULT NULL,
   `recurring_rule` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL
+  `description` text DEFAULT NULL,
+  `winner` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`id`, `race_page_id`, `title`, `start_datetime`, `end_datetime`, `location`, `timezone`, `recurring_rule`, `description`, `winner`, `image`) VALUES
+(1, 7, '2025 Indianapolis 500', '2025-05-25 12:00:00', '2025-05-25 17:00:00', 'Indianapolis, USA', 'America/New_York', NULL, 'Annual 500-mile IndyCar race at the Indianapolis Motor Speedway.', 'Josef Newgarden', 'event/2025-Indianapolis-500.webp'),
+(2, 8, '24 Hours of Le Mans 2024', '2024-06-15 16:00:00', '2024-06-16 16:00:00', 'Le Mans, France', 'Europe/Paris', NULL, 'The legendary 24-hour endurance race on the Circuit de la Sarthe.', 'Ferrari', 'event/24h-Le-Mans-2024.jpg'),
+(3, 9, 'F1 Season Finale 2025', '2025-12-07 13:00:00', '2025-12-07 16:00:00', 'Abu Dhabi, UAE', 'Asia/Dubai', NULL, 'The final race of the 2025 Formula 1 World Championship season.', 'Max Verstappen', 'event/F1-Season-Finale-2025.jpg');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `media`
+--
+
+CREATE TABLE `media` (
+  `id` int(11) NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  `path` varchar(1024) DEFAULT NULL,
+  `mime_type` varchar(100) DEFAULT NULL,
+  `size` int(11) DEFAULT NULL,
+  `uploaded_by` int(11) DEFAULT NULL,
+  `uploaded_at` datetime DEFAULT current_timestamp(),
+  `is_approved` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_resets`
 --
 
 CREATE TABLE `media` (
@@ -162,6 +231,7 @@ CREATE TABLE `password_resets` (
 
 -- --------------------------------------------------------
 
+
 --
 -- Table structure for table `race_pages`
 --
@@ -179,6 +249,21 @@ CREATE TABLE `race_pages` (
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `race_pages`
+--
+
+INSERT INTO `race_pages` (`id`, `title`, `slug`, `category_id`, `summary`, `content`, `created_by`, `is_published`, `created_at`, `updated_at`) VALUES
+(1, 'Monte Carlo Rally', 'monte-carlo-rally', 9, 'Historic WRC rally stage through Monaco known for its challenging snow and tarmac mix.', NULL, NULL, 1, '2026-04-13 02:27:39', '2026-04-13 02:27:39'),
+(2, 'Gainesville Raceway', 'gainesville-raceway', 7, 'Premier NHRA drag racing facility in Florida hosting major national events.', NULL, NULL, 1, '2026-04-13 02:27:39', '2026-04-13 02:27:39'),
+(3, 'Pocono Raceway', 'pocono-raceway', 5, 'Unique triangular NASCAR oval in Pennsylvania, known as the Tricky Triangle.', NULL, NULL, 1, '2026-04-13 02:27:39', '2026-04-13 02:27:39'),
+(4, 'Indianapolis Motor Speedway', 'indianapolis-motor-speedway', 5, '2.5-mile oval known as The Brickyard, hosting both NASCAR and IndyCar events.', NULL, NULL, 1, '2026-04-13 02:27:39', '2026-04-13 02:27:39'),
+(5, 'Circuit de Monaco', 'circuit-de-monaco', 1, 'Iconic 3.34 km F1 street circuit through Monte Carlo with 19 turns.', NULL, NULL, 1, '2026-04-13 02:27:39', '2026-04-13 02:27:39'),
+(6, 'Suzuka Circuit', 'suzuka-circuit', 1, '5.81 km Japanese F1 circuit famous for its unique figure-8 layout and 18 turns.', NULL, NULL, 1, '2026-04-13 02:27:39', '2026-04-13 02:27:39'),
+(7, '2025 Indianapolis 500', '2025-indianapolis-500', 1, 'The 109th running of the Indianapolis 500. Winner: Josef Newgarden.', NULL, NULL, 1, '2026-04-13 02:27:39', '2026-04-13 02:27:39'),
+(8, '24 Hours of Le Mans 2024', '24-hours-le-mans-2024', 3, '2024 FIA WEC endurance race at Le Mans, France. Winner: Ferrari.', NULL, NULL, 1, '2026-04-13 02:27:39', '2026-04-13 02:27:39'),
+(9, 'F1 Season Finale 2025', 'f1-season-finale-2025', 1, '2025 Formula 1 Abu Dhabi Grand Prix season finale. Winner: Max Verstappen.', NULL, NULL, 1, '2026-04-13 02:27:39', '2026-04-13 02:27:39');
+
 -- --------------------------------------------------------
 
 --
@@ -192,7 +277,23 @@ CREATE TABLE `race_page_drivers` (
   `note` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
+--
+-- Dumping data for table `race_page_drivers`
+--
+
+INSERT INTO `race_page_drivers` (`id`, `race_page_id`, `driver_id`, `note`) VALUES
+(1, 5, 1, '5× Monaco GP winner'),
+(2, 5, 2, '3× Monaco GP winner'),
+(3, 6, 1, '6× Japanese GP winner'),
+(4, 6, 2, 'Multiple Suzuka wins'),
+(5, 1, 3, '8× Monte Carlo Rally winner'),
+(6, 1, 4, '8× Monte Carlo Rally winner'),
+(7, 3, 6, 'Multiple Pocono wins'),
+(8, 4, 7, 'Brickyard 400 winner'),
+(9, 2, 5, '16× NHRA champion'),
+(10, 7, 7, 'Past Indy competitor');
+
+-- -------------------------------------------------------- 
 
 --
 -- Table structure for table `roles`
@@ -272,6 +373,39 @@ INSERT INTO `subcategories` (`id`, `category_id`, `name`, `slug`, `description`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tracks`
+--
+
+CREATE TABLE `tracks` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `country` varchar(100) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `length_km` decimal(8,3) DEFAULT NULL,
+  `length_display` varchar(50) DEFAULT NULL,
+  `turns` int(11) DEFAULT NULL,
+  `famous_for` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `race_page_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tracks`
+--
+
+INSERT INTO `tracks` (`id`, `name`, `slug`, `location`, `country`, `category_id`, `length_km`, `length_display`, `turns`, `famous_for`, `image`, `race_page_id`) VALUES
+(1, 'Monte Carlo Rally', 'monte-carlo-rally', 'Monaco', 'Monaco', 9, 300.000, '~300 km stages', NULL, 'Snow & tarmac mix', 'track-img/Monte-Carlo-Rally.jpg', 1),
+(2, 'Gainesville Raceway', 'gainesville-raceway', 'Gainesville, Florida', 'USA', 7, 0.402, '402 m', 0, 'NHRA events', 'track-img/Gainesville-Raceway-Drag.jpg', 2),
+(3, 'Pocono Raceway', 'pocono-raceway', 'Long Pond, Pennsylvania', 'USA', 5, 4.023, '2.5 mi', 3, 'Tricky Triangle', 'track-img/Pocono-Raceway-NASCAR.jpg', 3),
+(4, 'Indianapolis Motor Speedway', 'indianapolis-motor-speedway', 'Indianapolis, Indiana', 'USA', 5, 4.023, '2.5 mi', 4, 'The Brickyard', 'track-img/Indianapolis-Motor-Speedway-NASCAR.jpg', 4),
+(5, 'Circuit de Monaco', 'circuit-de-monaco', 'Monte Carlo', 'Monaco', 1, 3.337, '3.34 km', 19, 'Tight street circuit', 'track-img/Monte-Carlo-F1.jpg', 5),
+(6, 'Suzuka Circuit', 'suzuka-circuit', 'Suzuka, Mie', 'Japan', 1, 5.807, '5.81 km', 18, 'Figure-8 layout', 'track-img/Suzuka-Circuit-F1.jpg', 6);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -332,6 +466,15 @@ ALTER TABLE `drivers`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `driver_categories`
+--
+ALTER TABLE `driver_categories`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_dc` (`driver_id`,`category_id`),
+  ADD KEY `dc_ibfk_2` (`category_id`);
+
+
+--
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
@@ -384,6 +527,15 @@ ALTER TABLE `subcategories`
   ADD KEY `category_id` (`category_id`);
 
 --
+-- Indexes for table `tracks`
+--
+ALTER TABLE `tracks`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `slug` (`slug`),
+  ADD KEY `category_id` (`category_id`),
+  ADD KEY `race_page_id` (`race_page_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -425,6 +577,12 @@ ALTER TABLE `comments`
 --
 ALTER TABLE `drivers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `driver_categories`
+--
+ALTER TABLE `driver_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `events`
@@ -469,6 +627,12 @@ ALTER TABLE `subcategories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
+-- AUTO_INCREMENT for table `tracks`
+--
+ALTER TABLE `tracks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -499,6 +663,13 @@ ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`race_page_id`) REFERENCES `race_pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `comments_ibfk_3` FOREIGN KEY (`parent_comment_id`) REFERENCES `comments` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `driver_categories`
+--
+ALTER TABLE `driver_categories`
+  ADD CONSTRAINT `dc_ibfk_1` FOREIGN KEY (`driver_id`) REFERENCES `drivers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `dc_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `events`
@@ -537,6 +708,13 @@ ALTER TABLE `race_page_drivers`
 --
 ALTER TABLE `subcategories`
   ADD CONSTRAINT `subcategories_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `tracks`
+--
+ALTER TABLE `tracks`
+  ADD CONSTRAINT `tracks_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `tracks_ibfk_2` FOREIGN KEY (`race_page_id`) REFERENCES `race_pages` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users`

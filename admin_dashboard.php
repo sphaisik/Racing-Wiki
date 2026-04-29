@@ -1,7 +1,7 @@
 <?php
 include 'header.php';
 
-session_start();
+//session_start();
 
 // Temporarily disable login check to allow access without login
 /*
