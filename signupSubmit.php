@@ -25,7 +25,7 @@
             $sql = "insert into users (id, username, email, password_hash, role_id) values (0, '$username', '$email', '$password_hash', '$role')";
 
             // connect to the database
-            require 'DBConnect.php';
+            require 'db.php';
 
             // process sql command using PHP code with connection object.
             try {

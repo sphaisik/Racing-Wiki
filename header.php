@@ -55,20 +55,20 @@ header("Expires: 0");
             </div>
 
             <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-                <a href="bookmarks.php" class="w3-bar-item w3-button w3-green w3-left w3-mobile">
+                <a href="bookmarks.php" class="w3-button w3-green" style="border-radius:8px;">
                     <i class="fas fa-bookmark"></i> Bookmarks
                 </a>
-                <a href="profile.php" class="w3-bar-item w3-button w3-green w3-right w3-mobile">
+                <a href="profile.php" class="w3-button w3-green" style="border-radius:8px;">
                     <i class="fas fa-user"></i> Profile
                 </a>
-                <a href="logout.php" class="w3-bar-item w3-button w3-right w3-mobile">
-                    <i class="fas fa-right-to-bracket"></i> Logout
+                <a href="logout.php" class="w3-button w3-white" style="border-radius:8px;">>
+                    <i class="fas fa-left-to-bracket"></i> Logout
                 </a>
             <?php else: ?>
-                <a href="signup.php" class="w3-bar-item w3-button w3-green w3-right w3-mobile">
+                <a href="signup.php" class="w3-button w3-green" style="border-radius:8px;">
                     <i class="fas fa-user-plus"></i> Sign Up
                 </a>
-                <a href="login.php" class="w3-bar-item w3-button w3-right w3-mobile">
+                <a href="login.php" class="w3-button w3-white" style="border-radius:8px;">
                     <i class="fas fa-right-to-bracket"></i> Login
                 </a>
             <?php endif; ?>

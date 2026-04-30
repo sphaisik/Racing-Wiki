@@ -11,10 +11,10 @@
         $password = $_GET['password'];
 
         $sql = "SELECT id, username, password_hash FROM users WHERE username = ?";
-        require 'DBConnect.php';
+        require 'db.php';
 
         if ($username === "" or $password === ""):
-            echo "<h2>Please return to the Login form and fill in all fields.<h2>";
+            echo "<h1>Please return to the Login form and fill in all fields.<h1>";
 
         else:
             try {
@@ -32,10 +32,10 @@
                         $_SESSION['user_id'] = $row['id'];
                         header("Location:index.php");
                     } else {
-                        header("Location:error.php?error=Login failed, please go back and try again.");
+                        echo "<h1>Login failed, please go back and try again.<h1>";
                     }
                 } else {
-                    header("Location:error.php?error=Login failed, please go back and try again.");
+                    echo "<h1>Login failed, please go back and try again.<h1>";
                 }
                 $conn->close();
             } catch (Exception $ex) {
