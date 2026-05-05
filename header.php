@@ -9,13 +9,13 @@ header("Expires: 0");
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Racing Wiki</title>
 
-    <link rel="stylesheet" href="mystyles.css">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="mystyles.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -24,7 +24,7 @@ header("Expires: 0");
         .header-banner {
             position: relative;
             width: 100%;
-            height: 280px;/*Images height*/
+            height: 280px; /* Images height */
             overflow: hidden;
         }
 
@@ -50,8 +50,15 @@ header("Expires: 0");
             padding: 15px 20px;
             background: rgba(0, 0, 0, 0.3);
         }
-/*left side of header*/
-        .header-left { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+        /* left side of header */
+        .header-left {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
         .header-left a, .header-left button {
             color: white;
             background: rgba(0, 0, 0, 0.5);
@@ -63,26 +70,32 @@ header("Expires: 0");
             transition: 0.3s;
         }
 
+        .site-title {
+            font-size: 22px;
+            font-weight: bold;
+        }
 
-        .site-title { font-size: 22px; font-weight: bold; }
-        
-        /*right side of header (login, sign up)*/
-        .header-right { display: flex; gap: 10px; }
+        /* right side of header (login, sign up, logout, admin dashboard) */
+        .header-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
 
 <div class="header-banner">
     <div class="header-images">
-        <img src="Logo-img/img1.jpg">
-        <img src="Logo-img/img2.jpg">
-        <img src="Logo-img/img3.jpg">
-        <img src="Logo-img/img4.jpg">
-        <img src="Logo-img/img5.jpg">
-        <img src="Logo-img/img6.jpg">
-        <img src="Logo-img/img7.jpg">
-        <img src="Logo-img/img8.jpg">
-        <img src="Logo-img/img9.jpg">
+        <img src="Logo-img/img1.jpg" alt="Image 1" />
+        <img src="Logo-img/img2.jpg" alt="Image 2" />
+        <img src="Logo-img/img3.jpg" alt="Image 3" />
+        <img src="Logo-img/img4.jpg" alt="Image 4" />
+        <img src="Logo-img/img5.jpg" alt="Image 5" />
+        <img src="Logo-img/img6.jpg" alt="Image 6" />
+        <img src="Logo-img/img7.jpg" alt="Image 7" />
+        <img src="Logo-img/img8.jpg" alt="Image 8" />
+        <img src="Logo-img/img9.jpg" alt="Image 9" />
     </div>
 
     <div class="header-overlay">
@@ -94,23 +107,38 @@ header("Expires: 0");
             <a href="event.php"><i class="fas fa-layer-group"></i> Events, Drivers & Tracks</a>
             <a href="categories.php"><i class="fas fa-layer-group"></i> Categories</a>
 
-    <div class="w3-dropdown-hover w3-mobile">
-        <button class="w3-button">
-            About <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="w3-dropdown-content w3-bar-block w3-dark-grey" style="min-width: 320px;">
-            <span class="w3-bar-item w3-text-white" style="white-space: normal; line-height: 1.25;">
-                Racing Wiki is a community site for learning about race series, events, drivers, and history.
-                Search pages, browse categories, bookmark favorites, and discuss with comments.
-            </span>
-        </div>
-    </div>
+            <div class="w3-dropdown-hover w3-mobile">
+                <button class="w3-button">
+                    About <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="w3-dropdown-content w3-bar-block w3-dark-grey" style="min-width: 320px;">
+                    <span class="w3-bar-item w3-text-white" style="white-space: normal; line-height: 1.25;">
+                        Racing Wiki is a community site for learning about race series, events, drivers, and history.
+                        Search pages, browse categories, bookmark favorites, and discuss with comments.
+                    </span>
+                </div>
+            </div>
         </div>
 
         <div class="header-right">
             <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+                <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 3): /* role_id 3 means admin */ ?>
+                    <a href="admin_dashboard.php" class="w3-button w3-blue" style="border-radius:8px;">
+                        <i class="fas fa-tachometer-alt"></i> Admin Dashboard
+                    </a>
+                <?php endif; ?>
+
                 <a href="profile.php" class="w3-button w3-green" style="border-radius:8px;">
                     <i class="fas fa-user"></i> Profile
+                </a>
+
+                <!-- Add Bookmarks link here -->
+                <a href="bookmarks.php" class="w3-button w3-yellow" style="border-radius:8px;">
+                    <i class="fas fa-bookmark"></i> Bookmarks
+                </a>
+
+                <a href="logout.php" class="w3-button w3-red" style="border-radius:8px;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             <?php else: ?>
                 <a href="signup.php" class="w3-button w3-green" style="border-radius:8px;">
@@ -125,3 +153,9 @@ header("Expires: 0");
 </div>
 
 <div class="w3-container" style="max-width: 1600px; margin: 0 auto;">
+<!-- Page content starts here -->
+
+</div>
+
+</body>
+</html>

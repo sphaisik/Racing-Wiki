@@ -1,7 +1,10 @@
 <?php
 
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
- */
-
+clearstatcache();
+session_start();
+unset($_SESSION['user']);
+unset($_SESSION['user_id']);
+$_SESSION['logged_in'] = false;
+header("Location:index.php");
+session_destroy();
+?>

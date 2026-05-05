@@ -1,11 +1,5 @@
 <?php
-session_start();
-/*
-if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
-    header('HTTP/1.1 403 Forbidden');
-    exit('Access denied');
-}
-*/
+include 'header.php';
 
 $mysqli = new mysqli('localhost', 'root', '', 'racing_wiki');
 if ($mysqli->connect_error) {
@@ -62,42 +56,151 @@ $stmt->close();
 <html lang="en">
 <head>
     <title>Edit Subcategory</title>
+    <style>
+        /* Light, clean styling consistent with previous forms */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9fafb;
+            color: #222;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+        form {
+            max-width: 600px;
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #444;
+        }
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            margin-top: 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+            color: #333;
+            background: #fefefe;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #3b82f6;
+            outline: none;
+            background: #fff;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        button {
+            margin-top: 25px;
+            padding: 12px 20px;
+            background-color: #3b82f6;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: inherit;
+        }
+        button:hover {
+            background-color: #2563eb;
+        }
+        a {
+            margin-left: 15px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            font-family: inherit;
+        }
+        a:hover {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .error-message {
+            max-width: 600px;
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            background-color: #fee2e2;
+            border: 1px solid #fecaca;
+            border-radius: 6px;
+            color: #b91c1c;
+            font-weight: 600;
+        }
+        /* Checkbox label inline */
+        label.checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #444;
+        }
+        input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Edit Subcategory</h1>
-    <?php if (!empty($error)): ?>
-        <p style="color:red;"><?= htmlspecialchars($error) ?></p>
-    <?php endif; ?>
-    <form method="post" action="">
-        <label>
-            Name:<br>
-            <input type="text" name="name" value="<?= htmlspecialchars($name) ?>" required>
-        </label><br><br>
-        <label>
-            Slug:<br>
-            <input type="text" name="slug" value="<?= htmlspecialchars($slug) ?>" required>
-        </label><br><br>
-        <label>
-            Description:<br>
-            <textarea name="description" rows="5" cols="50"><?= htmlspecialchars($description) ?></textarea>
-        </label><br><br>
-        <label>
-            Category:<br>
-            <select name="category_id" required>
-                <option value="">-- Select Category --</option>
-                <?php foreach ($categories as $cat): ?>
-                    <option value="<?= $cat['id'] ?>" <?= $cat['id'] == $category_id ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($cat['name']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </label><br><br>
-        <label>
-            Visible:
-            <input type="checkbox" name="visible" <?= $visible ? 'checked' : '' ?>>
-        </label><br><br>
-        <button type="submit">Save Changes</button>
-        <a href="admin_dashboard.php">Cancel</a>
-    </form>
+
+<h1>Edit Subcategory</h1>
+
+<?php if (!empty($error)): ?>
+    <div class="error-message"><?= htmlspecialchars($error) ?></div>
+<?php endif; ?>
+
+<form method="post" action="">
+    <label for="name">Name *</label>
+    <input type="text" id="name" name="name" value="<?= htmlspecialchars($name) ?>" required>
+
+    <label for="slug">Slug *</label>
+    <input type="text" id="slug" name="slug" value="<?= htmlspecialchars($slug) ?>" required>
+
+    <label for="description">Description</label>
+    <textarea id="description" name="description"><?= htmlspecialchars($description) ?></textarea>
+
+    <label for="category_id">Category *</label>
+    <select id="category_id" name="category_id" required>
+        <option value="">-- Select Category --</option>
+        <?php foreach ($categories as $cat): ?>
+            <option value="<?= $cat['id'] ?>" <?= $cat['id'] == $category_id ? 'selected' : '' ?>>
+                <?= htmlspecialchars($cat['name']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+
+    <label class="checkbox-label">
+        <input type="checkbox" name="visible" <?= $visible ? 'checked' : '' ?>>
+        Visible
+    </label>
+
+    <button type="submit">Save Changes</button>
+    <a href="admin_dashboard.php">Cancel</a>
+</form>
+
+<?php include 'footer.php'; ?>
+
 </body>
 </html>

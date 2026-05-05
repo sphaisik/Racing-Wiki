@@ -1,16 +1,6 @@
 <?php
 include 'header.php';
 
-//session_start();
-
-// Temporarily disable login check to allow access without login
-/*
-if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
-    header('HTTP/1.1 403 Forbidden');
-    exit('Access denied');
-}
-*/
-
 $mysqli = new mysqli('localhost', 'root', '', 'racing_wiki');
 if ($mysqli->connect_error) {
     die('Database connection error: ' . $mysqli->connect_error);
